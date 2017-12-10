@@ -1,6 +1,6 @@
 use strict;
 our @File = ();
-CopyFile("jumpOffsets.txt");
+CopyFile("jumpOffsetstext.txt");
 findExit();
 
 sub findExit(){
@@ -20,7 +20,15 @@ sub findExit(){
 
 
 			#Increment the last jump position
-			$File[$lastinst]++ if ( $jumps != undef);
+			if ( $jumps != undef){
+				if ( $File[$lastinst] >= 3 ){
+						$File[$lastinst]--;
+					}else {
+						$File[$lastinst]++;
+					}
+				 
+
+			}
 
 			#print " Current state of the skip inst @File  \n";
 
@@ -34,7 +42,7 @@ sub findExit(){
 			last if ( $i >= scalar ( @File ));
 			
 			#Safty
-			die (" Infinit loop") if ($jumps > 1000000) ;
+			die (" Infinit loop") if ($jumps > 100000000) ;
 
 		} 
 

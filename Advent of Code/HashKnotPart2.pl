@@ -13,6 +13,8 @@ our $SkipLength = 0;
 our $Hash = Knot();
 
 print "HASH is $Hash \n";
+
+
 sub Knot(){
 	print "<LIST> @List \n";
 	print "<LENGTH> @Lengths \n";
