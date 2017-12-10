@@ -1,4 +1,4 @@
-my $File = CopyFile("fullnodes.txt");
+my $File = CopyFile("fullnode.txt");
 #my $File = CopyFile("node.txt");
 my $ChildHash = BuildChildHash($File);
 my $Parent  = LinkChildAndGetParent($ChildHash);
@@ -21,8 +21,8 @@ $Tab[10] = "\t\t\t\t\t\t\t\t\t\t";
 
 
 
-GetWeightByTower(%{$ChildHash}->{$Parent});
-PrintTree(%{$ChildHash}->{$Parent} );
+GetWeightByTower($ChildHash->{$Parent});
+PrintTree($ChildHash->{$Parent} );
 
 sub PrintTree(){
   $Level++;
@@ -32,30 +32,32 @@ sub PrintTree(){
 
   foreach my $node ( keys %{$ChildHash->{R}} ){
      #print "\n".$Tab[$Level]. " -><$node>\(" . %{$ChildHash}->{R}{$node}{W} . "\)  ";
-      $siblingWeight = %{$ChildHash}->{R}{$node}{TW} if ( $siblingWeight == undef ) ;
+      $siblingWeight = $ChildHash->{R}{$node}{TW} if ( $siblingWeight == undef ) ;
 
-     PrintTree(%{$ChildHash}->{R}{$node});
+     PrintTree($ChildHash->{R}{$node});
 
-     print "\n".$Tab[$Level]. " -><$node>\(" . %{$ChildHash}->{R}{$node}{TW} . "\)" . "\(" . %{$ChildHash}->{R}{$node}{W} . "\) " if ( $Level != 0 ) ;
+     print "\n".$Tab[$Level]. " -><$node>\(" . $ChildHash->{R}{$node}{TW} . "\)" . "\(" . $ChildHash->{R}{$node}{W} . "\) " if ( $Level != 0 ) ;
 
-     if ( %{$ChildHash}->{R}{$node}{TW} != $siblingWeight ){
-        $diff = %{$ChildHash}->{R}{$node}{TW} - %{$ChildHash}->{R}{$node}{W} ;
+     if ( $ChildHash->{R}{$node}{TW} != $siblingWeight ){
+        $diff = $ChildHash->{R}{$node}{TW} - $ChildHash->{R}{$node}{W} ;
         print " <>ODD<> \($diff \) " if ( $Level != 0 );
         #$siblingWeight = %{$ChildHash}->{R}{$node}{TW};
      }
   }
   $Level--;
 }
+
+
 sub GetWeightByTower()
 {
   $Level++;
   my $ChildHash = shift;
 
   foreach my $node ( keys %{$ChildHash->{R}} ){
-     $ChildHash->{TW} = $ChildHash->{TW} + %{$ChildHash}->{R}{$node}{W} + %{$ChildHash}->{R}{$node}{TW};
-     GetWeightByTower(%{$ChildHash}->{R}{$node});
+     $ChildHash->{TW} = $ChildHash->{TW} + $ChildHash->{R}{$node}{W} + $ChildHash->{R}{$node}{TW};
+     GetWeightByTower($ChildHash->{R}{$node});
      #$ChildHash->{TW} = $ChildHash->{TW} + %{$ChildHash}->{W} ;
-     %{$ChildHash}->{R}{$node}{TW} = %{$ChildHash}->{R}{$node}{TW} +  %{$ChildHash}->{R}{$node}{W};
+     $ChildHash->{R}{$node}{TW} = $ChildHash->{R}{$node}{TW} +  $ChildHash->{R}{$node}{W};
      #print "\n".$Tab[$Level]. " -><$node>\(" . %{$ChildHash}->{R}{$node}{W} . "\)  ";
      #print "\n".$Tab[$Level]. " -><$node>\(" . %{$ChildHash}->{R}{$node}{TW} . "\)" . "\(" . %{$ChildHash}->{R}{$node}{W} . "\) " if ( $Level < 5 )  ;
   }
@@ -75,7 +77,7 @@ sub LinkChildAndGetParent(){
      my $Parent = FindParent( $Child , $child );
      if (  $Parent != undef ){
         #print "Pre Parent $Parent \n ";
-        $Parent->{R}{$child} = %{$Child}->{$child};
+        $Parent->{R}{$child} = $Child->{$child};
         #print "$Parent".$Parent->{W}. " \n ";
         #print "$Parent".$Parent->{R}. " \n ";
      }else{
@@ -90,10 +92,10 @@ sub FindParent(){
   my $Parents = shift;
   my $child = shift;
   foreach my $parent ( keys %{$Parents} ){
-      if ( exists %{$Parents}->{$parent}{R}{$child} ){
+      if ( exists $Parents->{$parent}{R}{$child} ){
          #print "<CHILD><$child><PARENT><$parent> \n";
          #return %{$Parents}->{$parent}{R}{$child}
-         return %{$Parents}->{$parent};
+         return $Parents->{$parent};
       } else {
          #print "<Failed FIND LOOP><CHILD><$child><PARENT><$parent>\n";
      }
