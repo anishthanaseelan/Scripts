@@ -15,7 +15,7 @@ public class Firewall {
 		createBots();
 		
 		// Move Bots
-		Integer skiptime = 10;
+		Integer skiptime = 92545;
 		while (scv != 0) {
 			bf.resetBots();
 			scv = 0;
@@ -26,7 +26,7 @@ public class Firewall {
 			
 			scv = movePackage();
 			
-			if ( skiptime > 100000){
+			if ( skiptime > 1000000){
  				break;
  			}
  			System.out.println("Skip Level is " + skiptime + " The Sceviarity is " + scv );
