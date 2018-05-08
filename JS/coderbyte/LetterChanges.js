@@ -1,6 +1,6 @@
 function LetterChanges(str) { 
     let arr = str.split('');
-    let vlMap = new Set([['a','A' ],['e','E'],['i','I'],['o','O'],['u','U']]);
+    let vlMap = new Map([['a','A' ],['e','E'],['i','I'],['o','O'],['u','U']]);
 
     function isChar(c){
         if (c.charCodeAt(0) > 96 && c.charCodeAt(0) < 123 ){
@@ -22,7 +22,9 @@ function LetterChanges(str) {
     str = '';
     for ( let i = 0 ; i< arr.length ; i++){
         c = nextChar(arr[i]);
+        console.log(vlMap.has(c) + c);
         if ( vlMap.has(c)){
+            
             c = vlMap.get(c);
         }
         str = str + c;
@@ -31,6 +33,6 @@ function LetterChanges(str) {
            
   }
   // keep this function call here 
- console.log( LetterChanges('i am genome'));                            
+ console.log( LetterChanges("fun times!"));                            
 
   
