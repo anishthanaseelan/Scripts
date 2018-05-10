@@ -15,7 +15,7 @@ public class BuildTower {
 		Node parentNode = null;
 
 		ReadFile file = new ReadFile(
-				"C:\\Users\\anish\\OneDrive\\Documents\\Projects\\Scripts\\Advent of Code\\node.txt");
+				"node.txt");
 		while (file.HasNext()) {
 			String nodeInfo = file.Read();
 			String[] info = null;
