@@ -27,10 +27,7 @@ function MaximalSquare(strArr) {
         }
       }
     }
-
-  
     return ( size*size); 
-           
   }
      
   // keep this function call here 
