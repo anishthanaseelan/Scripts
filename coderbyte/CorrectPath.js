@@ -1,63 +1,49 @@
-function ChessboardTraveling(str) {
-    let arr = str.match(/\d/g);
-    let xy = arr[0].toString()+arr[1].toString();
-    let ab = arr[2].toString()+arr[3].toString();
-    let boardMap = new Map();
+let maxX = 5;
+let maxY = 5;
 
-    function boxFactory(maxX , maxY){
-        function createBox(x,y){
-            if ( x < 1 || y < 1 ) {return undefined;}
-            let id = x.toString() + y.toString();
-            
-            if ( !boardMap.has(id) && x<= maxX && y <= maxY){
-                console.log(x + ":" + y);
-                boardMap.set(id ,  {
-                    id: id,
-                    x:  x,
-                    y:  y,
-                    boxUp: createBox(x+1 , y),
-                    boxDown: createBox(x-1 , y),
-                    boxRight: createBox(x , y+1),
-                    boxLeft: createBox(x , y-1),
-                    isVisited : false
-                });
-            }
-            return boardMap.get(id); 
-        }
-        createBox(1,1);
+function IsitmyFamily(id, parent) {
+    //console.log( id, parent);
+    if (parent === undefined) {
+        return false;
+    } else if (id == '11') {
+        return true;
+    } else if (id == parent.id) {
+        return true;
+    } else if (parent.id == '11') {
+        return false;
     }
-
-    function traverseBoard(xy,ab){
-        let visitCount = 0;
-        function visitBox(xy){
-            console.log("Visiting " + xy );
-            if ( !boardMap.has(xy) ) { return; }
-
-            if (xy == ab) { 
-                //console.log("Destination reached!");
-                visitCount++;
-                return true;
-            }
-            
-            let box = boardMap.get(xy);
-            box.isVisited = true;
-            
-            if ( box.boxUp != undefined ){
-                visitBox(box.boxUp.id);
-            } 
-            if ( box.boxRight != undefined ){
-                visitBox(box.boxRight.id);
-            }
-
-        }  
-        visitBox(xy);
-        return visitCount;
-    }
-    boxFactory(5,5); 
-    console.log(traverseBoard('11','55'));
-    //return (traverseBoard(xy,ab));
+    return (IsitmyFamily(id, parent.parent));
 }
-console.log(ChessboardTraveling('(1 1)(5 5)'));
+
+function isMax(X, Y) {
+    if (X > maxX || Y > maxY || X < 1 || Y < 1) {
+        // console.log('Reahed Boundry' + X+''+Y) ;
+        return true;
+    }
+}
+
+function buildPathsTree(X, Y, parent) {
+    if (isMax(X, Y)) { return undefined };
+    if (IsitmyFamily(X + '' + Y, parent)) { return undefined };
+    console.log(X + '' + Y);
+    return (new Node(X, Y, parent));
+}
+
+function Node(X, Y, parent) {
+    this.id = X + '' + Y;
+    this.parent = parent;
+    //console.log('ID: ' + this );
+    if (!(X == maxX && Y == maxY)) {
+        this.left = buildPathsTree(X - 1, Y, this);
+        this.right = buildPathsTree(X + 1, Y, this);
+        this.up = buildPathsTree(X, Y - 1, this);
+        this.down = buildPathsTree(X, Y + 1, this);
+    }
+}
+
+let root = buildPathsTree(1, 1, undefined);
+console.log(root);
+
 /*
 
 Input:"???rrurdr?"
