@@ -1,69 +1,80 @@
-function ChessboardTraveling(str) {
-    let arr = str.match(/\d/g);
-    let xy = arr[0].toString()+arr[1].toString();
-    let ab = arr[2].toString()+arr[3].toString();
-    let boardMap = new Map();
+function CorrectPath(str) {
+    const matrixSize = { x: 5, y: 5 };
+    let currentCell = { x: 0, y: 0 };
 
-    function boxFactory(maxX , maxY){
-        function createBox(x,y){
-            if ( x < 1 || y < 1 ) {return undefined;}
-            let id = x.toString() + y.toString();
-            
-            if ( !boardMap.has(id) && x<= maxX && y <= maxY){
-                console.log(x + ":" + y);
-                boardMap.set(id ,  {
-                    id: id,
-                    x:  x,
-                    y:  y,
-                    boxUp: createBox(x+1 , y),
-                    boxDown: createBox(x-1 , y),
-                    boxRight: createBox(x , y+1),
-                    boxLeft: createBox(x , y-1),
-                    isVisited : false
-                });
-            }
-            return boardMap.get(id); 
+    moveRight = (i) => {
+        if (matrixSize.x > (currentCell.x + 1)) {
+            currentCell.x += 1;
+            traverse(i + 1);
+        } else {
+            console.log("Incorrect Path - Right")
         }
-        createBox(1,1);
+    };
+    moveLeft = (i) => {
+        if (matrixSize.x > (currentCell.x - 1)) {
+            currentCell.x -= 1;
+            traverse(i + 1);
+        } else {
+            console.log("Incorrect Path - left")
+        }
+    };
+
+    moveDown = (i) => {
+        if (matrixSize.y > (currentCell.y + 1)) {
+            currentCell.y += 1;
+            traverse(i + 1);
+        } else {
+            console.log("Incorrect Path - Down")
+        }
+    };
+    moveUp = (i) => {
+        if (0 <= (currentCell.y - 1)) {
+            currentCell.y -= 1;
+            traverse(i + 1);
+        } else {
+            console.log("Incorrect Path - Up")
+        }
+    };
+
+
+    function traverse(i) {
+
+        if ( i >= str.length) { 
+            console.log( currentCell.x + ":" + currentCell.y);
+            return 
+        }
+        console.log(str[i]);        
+        switch (str[i]) {
+            case 'r':
+                moveRight(i);
+                break;
+            case 'l':
+                moveLeft(i);
+                break;
+            case 'u':
+                moveUp(i);
+                break;
+            case 'd':
+                moveDown(i);
+                break;
+            case '?':
+                moveRight(i);
+                moveLeft(i);
+                moveUp(i);
+                moveDown(i);
+            default:
+                console.log('Dont know what to do with ' + str[i]);
+        }
     }
-
-    function traverseBoard(xy,ab){
-        let visitCount = 0;
-        function visitBox(xy){
-            console.log("Visiting " + xy );
-            if ( !boardMap.has(xy) ) { return; }
-
-            if (xy == ab) { 
-                //console.log("Destination reached!");
-                visitCount++;
-                return true;
-            }
-            
-            let box = boardMap.get(xy);
-            box.isVisited = true;
-            
-            if ( box.boxUp != undefined ){
-                visitBox(box.boxUp.id);
-            } 
-            if ( box.boxRight != undefined ){
-                visitBox(box.boxRight.id);
-            }
-
-        }  
-        visitBox(xy);
-        return visitCount;
-    }
-    boxFactory(5,5); 
-    console.log(traverseBoard('11','55'));
-    //return (traverseBoard(xy,ab));
+    traverse(0);
 }
-console.log(ChessboardTraveling('(1 1)(5 5)'));
+
+CorrectPath("dd?rrurdrd");
 /*
 
 Input:"???rrurdr?"
 
 Output:"dddrrurdrd"
-
 
 Input:"drdr??rrddd?"
 
